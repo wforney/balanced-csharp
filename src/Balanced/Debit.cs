@@ -1,106 +1,337 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Debit.cs" company="Balanced">
+//   Copyright © 2013
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Balanced
 {
+    using System;
+    using System.Collections.Generic;
+
+    /// <summary>
+    ///     Class Debit.
+    /// </summary>
     public class Debit : Resource
     {
-        public DateTime created_at { get; set; }
-        public IDictionary<string, object> meta { get; set; }
-        public int amount { get; set; }
-        public String description { get; set; }
-        public String transaction_number { get; set; }
-        public String card_uri { get; set; }
-        public String account_uri { get; set; }
-        public String hold_uri { get; set; }
-        public String refunds_uri { get; set; }
-        public String customer_uri { get; set; }
+        #region Constructors and Destructors
 
-        public Hold Hold { get; set; }
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Debit" /> class.
+        /// </summary>
+        public Debit()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Debit"/> class. 
+        /// Initializes a new instance of the <see cref="Resource"/> class.
+        /// </summary>
+        /// <param name="uri">
+        /// The uri.
+        /// </param>
+        public Debit(string uri)
+            : base(uri)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Debit"/> class.
+        /// </summary>
+        /// <param name="payload">
+        /// The payload.
+        /// </param>
+        public Debit(IDictionary<string, object> payload)
+            : base(payload)
+        {
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the account.
+        /// </summary>
+        /// <value>The account.</value>
         public Account Account { get; set; }
-        public Customer Customer { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the card.
+        /// </summary>
+        /// <value>The card.</value>
         public Card Card { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the customer.
+        /// </summary>
+        /// <value>The customer.</value>
+        public Customer Customer { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the hold.
+        /// </summary>
+        /// <value>The hold.</value>
+        public Hold Hold { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the refunds.
+        /// </summary>
+        /// <value>The refunds.</value>
         public Refund.Collection Refunds { get; set; }
 
-        public class Collection : ResourceCollection<Debit>
-        {
-            public Collection(String uri) : base(typeof(Debit), uri) { }
+        /// <summary>
+        ///     Gets or sets the account_uri.
+        /// </summary>
+        /// <value>The account_uri.</value>
+        public string account_uri { get; set; }
 
-            public Debit Create(
-                int amount,
-                string description,
-                string sourceUri,
-                string appearsOnStatementAs,
-                string onBehalfOfUri,
-                IDictionary<string, string> meta)
-            {
-                IDictionary<string, object> payload = new Dictionary<string, object>();
-                payload["amount"] = amount;
-                if (description != null) { payload["description"] = description; }
-                if (sourceUri != null) { payload["source_uri"] = sourceUri; }
-                if (appearsOnStatementAs != null) { payload["appears_on_statement_as"] = appearsOnStatementAs; }
-                if (onBehalfOfUri != null) { payload["on_behalf_of_uri"] = onBehalfOfUri; }
-                if (meta != null) { payload["meta"] = meta; }
-                return this.Create(payload);
-            }
-        };
+        /// <summary>
+        ///     Gets or sets the amount.
+        /// </summary>
+        /// <value>The amount.</value>
+        public int amount { get; set; }
 
-        public Debit() : base() {}
+        /// <summary>
+        ///     Gets or sets the card_uri.
+        /// </summary>
+        /// <value>The card_uri.</value>
+        public string card_uri { get; set; }
 
-        public Debit(String uri) : base(uri) { }
+        /// <summary>
+        ///     Gets or sets the created_at.
+        /// </summary>
+        /// <value>The created_at.</value>
+        public DateTime created_at { get; set; }
 
-        public Debit(IDictionary<string, object> payload) : base(payload) { }
+        /// <summary>
+        ///     Gets or sets the customer_uri.
+        /// </summary>
+        /// <value>The customer_uri.</value>
+        public string customer_uri { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string description { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the hold_uri.
+        /// </summary>
+        /// <value>The hold_uri.</value>
+        public string hold_uri { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the meta.
+        /// </summary>
+        /// <value>The meta.</value>
+        public IDictionary<string, object> meta { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the refunds_uri.
+        /// </summary>
+        /// <value>The refunds_uri.</value>
+        public string refunds_uri { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the transaction_number.
+        /// </summary>
+        /// <value>The transaction_number.</value>
+        public string transaction_number { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The deserialize.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
         public override void Deserialize(IDictionary<string, object> data)
         {
             base.Deserialize(data);
-            Hold = new Hold(hold_uri);
-            Account = new Account(account_uri);
-            Customer = new Customer(customer_uri);
-            Card = new Card(card_uri);
-            Refunds = new Refund.Collection(refunds_uri);
+            this.Hold = new Hold(this.hold_uri);
+            this.Account = new Account(this.account_uri);
+            this.Customer = new Customer(this.customer_uri);
+            this.Card = new Card(this.card_uri);
+            this.Refunds = new Refund.Collection(this.refunds_uri);
         }
 
-        public Refund Refund(
-            int amount,
-            string description,
-            IDictionary<string, string> meta)
+        /// <summary>
+        ///     Gets the account.
+        /// </summary>
+        /// <returns>Account.</returns>
+        public Account GetAccount()
         {
-            return Refunds.Create(amount, description, meta);
+            if (this.Account == null)
+            {
+                this.Account = new Account(this.account_uri);
+            }
+
+            return this.Account;
         }
 
+        /// <summary>
+        ///     Gets the card.
+        /// </summary>
+        /// <returns>Card.</returns>
+        public Card GetCard()
+        {
+            if (this.Card == null)
+            {
+                this.Card = new Card(this.card_uri);
+            }
+
+            return this.Card;
+        }
+
+        /// <summary>
+        ///     Gets the hold.
+        /// </summary>
+        /// <returns>Hold.</returns>
+        public Hold GetHold()
+        {
+            if (this.Hold == null)
+            {
+                this.Hold = new Hold(this.hold_uri);
+            }
+
+            return this.Hold;
+        }
+
+        /// <summary>
+        /// Refunds the specified amount.
+        /// </summary>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <param name="meta">
+        /// The meta.
+        /// </param>
+        /// <returns>
+        /// Refund.
+        /// </returns>
+        public Refund Refund(int amount, string description, IDictionary<string, string> meta)
+        {
+            return this.Refunds.Create(amount, description, meta);
+        }
+
+        /// <summary>
+        /// Refunds the specified amount.
+        /// </summary>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <returns>
+        /// Refund.
+        /// </returns>
         public Refund Refund(int amount)
         {
-            return Refund(amount, null, null);
+            return this.Refund(amount, null, null);
         }
 
+        /// <summary>
+        ///     Refunds this instance.
+        /// </summary>
+        /// <returns>Refund.</returns>
         public Refund Refund()
         {
             return new Refund();
         }
 
-        public Account GetAccount()
-        {
-            if (Account == null)
-                Account = new Account(account_uri);
-            return Account;
-        }
+        #endregion
 
-        public Card GetCard()
+        /// <summary>
+        ///     Class Collection.
+        /// </summary>
+        public class Collection : ResourceCollection<Debit>
         {
-            if (Card == null)
-                Card = new Card(card_uri);
-            return Card;
-        }
+            #region Constructors and Destructors
 
-        public Hold GetHold()
-        {
-            if (Hold == null)
-                Hold = new Hold(hold_uri);
-            return Hold;
-        }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Collection"/> class.
+            /// </summary>
+            /// <param name="uri">
+            /// The URI.
+            /// </param>
+            public Collection(string uri)
+                : base(typeof(Debit), uri)
+            {
+            }
+
+            #endregion
+
+            #region Public Methods and Operators
+
+            /// <summary>
+            /// Creates the specified amount.
+            /// </summary>
+            /// <param name="amount">
+            /// The amount.
+            /// </param>
+            /// <param name="description">
+            /// The description.
+            /// </param>
+            /// <param name="sourceUri">
+            /// The source URI.
+            /// </param>
+            /// <param name="appearsOnStatementAs">
+            /// The appears configuration statement asynchronous.
+            /// </param>
+            /// <param name="onBehalfOfUri">
+            /// The configuration behalf of URI.
+            /// </param>
+            /// <param name="meta">
+            /// The meta.
+            /// </param>
+            /// <returns>
+            /// Debit.
+            /// </returns>
+            public Debit Create(
+                int amount, 
+                string description, 
+                string sourceUri, 
+                string appearsOnStatementAs, 
+                string onBehalfOfUri, 
+                IDictionary<string, string> meta)
+            {
+                IDictionary<string, object> payload = new Dictionary<string, object>();
+                payload["amount"] = amount;
+                if (description != null)
+                {
+                    payload["description"] = description;
+                }
+
+                if (sourceUri != null)
+                {
+                    payload["source_uri"] = sourceUri;
+                }
+
+                if (appearsOnStatementAs != null)
+                {
+                    payload["appears_on_statement_as"] = appearsOnStatementAs;
+                }
+
+                if (onBehalfOfUri != null)
+                {
+                    payload["on_behalf_of_uri"] = onBehalfOfUri;
+                }
+
+                if (meta != null)
+                {
+                    payload["meta"] = meta;
+                }
+
+                return this.Create(payload);
+            }
+
+            #endregion
+        };
     }
 }
