@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.20827.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Balanced", "src\Balanced\Balanced.csproj", "{D03E619C-FEAF-4C49-B843-C517EC185CBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalancedTest", "src\BalancedTest\BalancedTest.csproj", "{20E9A22F-7092-49C5-996A-FB51566DA6DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BalancedTests", "src\BalancedTest\BalancedTests.csproj", "{20E9A22F-7092-49C5-996A-FB51566DA6DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D5B29674-C2C5-4607-B53A-0EDE460D479C}"
 	ProjectSection(SolutionItems) = preProject

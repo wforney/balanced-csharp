@@ -6,8 +6,8 @@
     <ProjectGuid>{20E9A22F-7092-49C5-996A-FB51566DA6DB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BalancedTest</RootNamespace>
-    <AssemblyName>BalancedTest</AssemblyName>
+    <RootNamespace>BalancedTests</RootNamespace>
+    <AssemblyName>BalancedTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
