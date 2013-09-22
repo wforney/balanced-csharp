@@ -9,6 +9,8 @@ namespace Balanced
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -171,10 +173,12 @@ namespace Balanced
         /// The executable.
         /// </param>
         /// <returns>
-        /// Exception.
+        /// The Exception.
         /// </returns>
         private Exception CreateError(WebException ex)
         {
+            Contract.Requires<ArgumentNullException>(ex != null);
+
             if (ex.Status != WebExceptionStatus.ProtocolError || ex.Response == null)
             {
                 return null;
@@ -284,18 +288,13 @@ namespace Balanced
 
             try
             {
-                using (var resp = req.GetResponse() as HttpWebResponse)
+                using (var resp = (HttpWebResponse)req.GetResponse())
                 {
-                    using (Stream stream = resp.GetResponseStream())
+                    using (var stream = resp.GetResponseStream())
                     {
                         var reader = new StreamReader(stream);
-                        string body = reader.ReadToEnd();
-                        if (body.Length == 0)
-                        {
-                            return null;
-                        }
-
-                        return this.Deserialize(body);
+                        var body = reader.ReadToEnd();
+                        return body.Length == 0 ? null : this.Deserialize(body);
                     }
                 }
             }
@@ -318,7 +317,7 @@ namespace Balanced
         /// The data.
         /// </param>
         /// <returns>
-        /// System.String.
+        /// The data string.
         /// </returns>
         private string Serialize(IDictionary<string, object> data)
         {
